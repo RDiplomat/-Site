@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товар</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html">Полесье ДГ</a></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="cart.php">Корзина</a></li>
+                <li><a href="auth.php" class="auth-link">Вход</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="product-details">
+            <div class="product-image">
+                <img src="https://educatte.ru/upload/iblock/e2a/98owihcu0r7mk1h5be9b22okbr3cgyo5.jpg" width="300" height="300" alt="Изображение товара">
+            </div>
+            <div class="product-info">
+                <h1 class="category">Куклы</h1>
+                <p class="price">2999 ₽</p>
+                <p class="description">Описание товара. Этот продукт сочетает в себе высокое качество и стиль.</p>
+                <button id="add-to-cart" data-id="3" data-name="Куклы" data-price="2999">Добавить в корзину</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="fixed-bottom">
+        <p>&copy; 2024 Полесье ДГ. Все права защищены.</p>
+    </footer>
+
+    <script>
+    document.getElementById('add-to-cart').addEventListener('click', function () {
+    const productId = this.getAttribute('data-id');
+    const productName = this.getAttribute('data-name');
+    const productPrice = this.getAttribute('data-price');
+
+    // Проверяем, что данные корректны
+    if (!productId || !productName || !productPrice) {
+        alert('Некорректные данные товара.');
+        return;
+    }
+
+    // Отправляем данные на сервер
+    fetch('add_to_cart.php', {
+        method: 'POST',
+        headers: {
+    'Content-Type': 'application/json',
+},
+        body: `product_id=${productId}&product_name=${encodeURIComponent(productName)}&product_price=${productPrice}`,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 'success') {
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
+});
+
+    </script>
+</body>
+</html>

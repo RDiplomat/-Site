@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полесье ДГ - Главная</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+<header class="navbar">
+    <div class="logo"><a href="index.html">Полесье ДГ</a></div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="cart.php">Корзина</a></li>
+            <li><a href="auth.php" class="auth-link">Вход</a></li>
+        </ul>
+    </nav>
+</header>
+<section>
+    <div class="filter">
+        <label for="category">Категория:</label>
+        <select id="category">
+            <option value="all">Все</option>
+            <option value="games_kukl">Куклы</option>
+            <option value="games_cars">Машинки</option>
+            <option value="games_konstruktor">Конструктор</option>
+            <option value="games_velo">Велосипеды</option>
+        </select>
+
+        <label for="stock">В наличии:</label>
+        <select id="stock">
+            <option value="all">Все</option>
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+        </select>
+
+        <label for="rating">Минимальный рейтинг:</label>
+        <select id="rating">
+            <option value="0">0</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <label for="min-price">Цена от:</label>
+        <input type="number" id="min-price" placeholder="Минимум" min="0">
+
+        <label for="max-price">до:</label>
+        <input type="number" id="max-price" placeholder="Максимум" min="0">
+
+        <button onclick="applyFilter()">Применить</button>
+        <button onclick="resetFilter()" class="reset-btn">Сбросить</button>
+    </div>
+
+    <div class="product-list" id="product-list">
+        <div class="product-card" data-price="999" data-category="games_cars" data-stock="true" data-rating="4.5">
+            <img src="https://educatte.ru/upload/iblock/a42/547i3lvgl8jdxm5e5tbhjzuakxnibyir.jpg" alt="Товар 1">
+            <h3>Машинки</h3>
+            <p>999 ₽</p>
+            <a href="product.html" class="details-btn">Подробнее</a>
+        </div>
+        <div class="product-card" data-price="1999" data-category="games_konstruktor" data-stock="false" data-rating="4.0">
+            <img src="https://educatte.ru/upload/iblock/759/qkd9jtlnhi3b813xxtg3sg6txrm55o7l.jpg" alt="Товар 2">
+            <h3>Конструктор</h3>
+            <p>1999 ₽</p>
+            <a href="product2.html" class="details-btn">Подробнее</a>
+        </div>
+        <div class="product-card" data-price="2999" data-category="games_kukl" data-stock="true" data-rating="3.8">
+            <img src="https://educatte.ru/upload/iblock/e2a/98owihcu0r7mk1h5be9b22okbr3cgyo5.jpg" alt="Товар 3">
+            <h3>Куклы</h3>
+            <p>2999 ₽</p>
+            <a href="product3.html" class="details-btn">Подробнее</a>
+        </div>
+        <div class="product-card" data-price="3999" data-category="games_velo" data-stock="true" data-rating="4.5">
+            <img src="https://educatte.ru/upload/iblock/81b/1rvo0c7wo84709e7yxkjsfe9cqg5ovxi.jpg" alt="Товар 4">
+            <h3>Велосипеды</h3>
+            <p>3999 ₽</p>
+            <a href="product4.html" class="details-btn">Подробнее</a>
+        </div>
+    </div>
+</section>
+<footer class="fixed-bottom">
+    <p>&copy; 2024 Полесье ДГ. Все права защищены.</p>
+</footer>
+
+
+<script src="script.js"></script>
+<script>
+    function applyFilter() {
+        var category = document.getElementById("category").value;
+        var stock = document.getElementById("stock").value;
+        var rating = parseFloat(document.getElementById("rating").value);
+        var minPrice = parseFloat(document.getElementById("min-price").value) || 0; // Устанавливаем 0, если значение не указано
+        var maxPrice = parseFloat(document.getElementById("max-price").value) || Infinity; // Устанавливаем Infinity, если значение не указано
+
+        var productCards = document.querySelectorAll(".product-card");
+
+        productCards.forEach(function(card) {
+            var cardCategory = card.getAttribute("data-category");
+            var cardStock = card.getAttribute("data-stock");
+            var cardRating = parseFloat(card.getAttribute("data-rating"));
+            var cardPrice = parseFloat(card.getAttribute("data-price"));
+
+            // Проверяем условия фильтрации
+            var isCategoryMatch = (category === "all" || category === cardCategory);
+            var isStockMatch = (stock === "all" || stock === cardStock);
+            var isRatingMatch = (cardRating >= rating);
+            var isPriceMatch = (cardPrice >= minPrice && cardPrice <= maxPrice);
+
+            // Устанавливаем видимость карточки товара
+            if (isCategoryMatch && isStockMatch && isRatingMatch && isPriceMatch) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+
+    function resetFilter() {
+        document.getElementById("category").value = "all";
+        document.getElementById("stock").value = "all";
+        document.getElementById("rating").value = "0";
+        document.getElementById("min-price").value = "";
+        document.getElementById("max-price").value = "";
+
+        var productCards = document.querySelectorAll(".product-card");
+        productCards.forEach(function(card) {
+            card.style.display = "block";
+        });
+    }
+</script>
+
+</body>
+</html>
